@@ -8,6 +8,7 @@ import sk.kasci.sokoban.input.WindowInput;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.MapObject;
 import sk.kasci.sokoban.objects.mapActors.Box;
+import sk.kasci.sokoban.objects.mapObjects.Goal;
 import sk.kasci.sokoban.objects.mapObjects.Wall;
 
 import java.io.IOException;
@@ -98,7 +99,15 @@ public class Game {
     }
 
     private void renderUI() {
-        // TODO: not implemented yet
+        int steps = this.activeMap.player.getSteps();
+        TextCharacter[] textCharactersSteps = TextCharacter.fromString("Steps: " + Integer.toString(steps));
+        for (int i = 0; i < textCharactersSteps.length; i++)
+            this.screen.setCharacter(2+i,2,  textCharactersSteps[i]);
+
+        long boxesOnGoal = this.activeMap.boxes.stream().filter(it -> this.activeMap.map[it.getX()][it.getY()] instanceof Goal).count();
+        TextCharacter[] textCharactersBoxes = TextCharacter.fromString("Score: " + Long.toString(boxesOnGoal) + "/" + Integer.toString(this.activeMap.boxes.size()));
+        for (int i = 0; i < textCharactersBoxes.length; i++)
+            this.screen.setCharacter(15+i,2,  textCharactersBoxes[i]);
     }
 
     private void renderMap() {
