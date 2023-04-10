@@ -7,6 +7,9 @@ import sk.kasci.sokoban.objects.mapObjects.Goal;
 import sk.kasci.sokoban.utils.MapFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Map {
 
@@ -17,6 +20,10 @@ public class Map {
 
     public Map() {
         this.boxes = new ArrayList<>();
+    }
+
+    public List<String> toList() {
+       return Arrays.stream(toString().split("\n")).collect(Collectors.toList());
     }
 
     @Override

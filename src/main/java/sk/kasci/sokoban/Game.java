@@ -1,16 +1,24 @@
 package sk.kasci.sokoban;
 
+import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.screen.Screen;
 import sk.kasci.sokoban.input.ConsoleInput;
 import sk.kasci.sokoban.input.InputValue;
+import sk.kasci.sokoban.input.WindowInput;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.MapObject;
 import sk.kasci.sokoban.objects.mapActors.Box;
 import sk.kasci.sokoban.objects.mapObjects.Wall;
 
+import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Game {
+
+    private Screen screen;
 
     private ArrayList<Map> maps;
 
@@ -34,9 +42,10 @@ public class Game {
         }
     }
 
-    public void start() {
+    public void start(Screen screen) {
         this.running = true;
         this.activeMap = maps.get(0);
+        this.screen = screen;
         loop();
     }
 
@@ -74,10 +83,32 @@ public class Game {
     }
 
     private InputValue input() {
-        return ConsoleInput.getInput();
+        return WindowInput.getInput(this.screen);
     }
 
     private void render() {
-        System.out.println(activeMap.toString());
+        renderMap();
+        renderUI();
+        try {
+            this.screen.refresh();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("It is not possible to render.");
+        }
+    }
+
+    private void renderUI() {
+        // TODO: not implemented yet
+    }
+
+    private void renderMap() {
+        List<String> list = activeMap.toList();
+        int xOff = 5;
+        int yOff = 5;
+        for (int y = 0; y < list.size(); y++) {
+            for (int x = 0; x < list.get(y).length(); x++) {
+                this.screen.setCharacter(x+xOff, y+yOff, new TextCharacter(list.get(y).charAt(x)));
+            }
+        }
     }
 }
