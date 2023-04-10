@@ -70,7 +70,7 @@ public class LevelLoader {
                     if (c == '$') {
                         map.boxes.add(new Box(j,i));
                     }
-                    map.map[j][i] = factory.get(c);
+                    map.map[j][i] = factory.fromFile(c);
                 }
             }
         }
