@@ -19,6 +19,7 @@ public class WindowInput {
                 case 'a': return LEFT;
                 case 'd': return RIGHT;
                 case 'q': return QUIT;
+                case 'n': return NEXT;
                 default: return NONE;
             }
         } catch (IOException e) {

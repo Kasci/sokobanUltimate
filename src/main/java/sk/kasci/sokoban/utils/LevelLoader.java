@@ -12,13 +12,13 @@ import java.util.*;
 
 public class LevelLoader {
 
-    private ArrayList<ArrayList<String>> rawLevels;
+    private List<ArrayList<String>> rawLevels;
 
     public LevelLoader() {
         this.rawLevels = new ArrayList<>();
     }
 
-    public ArrayList<Map> loadLevels(String path) {
+    public LinkedList<Map> loadLevels(String path) {
         URL url = getClass().getClassLoader().getResource(path);
         if (url == null) throw new RuntimeException("There is no such file");
         try (FileReader fr = new FileReader(url.getPath()); BufferedReader reader = new BufferedReader(fr)) {
@@ -41,7 +41,7 @@ public class LevelLoader {
             throw new RuntimeException("There was an error reading a file");
         }
 
-        ArrayList<Map> levels = new ArrayList<>();
+        LinkedList<Map> levels = new LinkedList<>();
         for (ArrayList<String> l: this.rawLevels) {
             levels.add(parseLevel(l));
         }

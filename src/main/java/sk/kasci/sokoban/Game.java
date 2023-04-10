@@ -11,6 +11,7 @@ import sk.kasci.sokoban.objects.mapObjects.Wall;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +19,12 @@ public class Game {
 
     private Screen screen;
 
-    private ArrayList<Map> maps;
+    private LinkedList<Map> maps;
 
     private boolean running = false;
     private Map activeMap;
 
-    public Game(ArrayList<Map> maps) {
+    public Game(LinkedList<Map> maps) {
         this.maps = maps;
     }
 
@@ -42,7 +43,7 @@ public class Game {
 
     public void start(Screen screen) {
         this.running = true;
-        this.activeMap = maps.get(0);
+        this.activeMap = maps.pop();
         this.screen = screen;
         loop();
     }
@@ -54,6 +55,12 @@ public class Game {
             case DOWN: move(0, 1); break;
             case LEFT: move(-1, 0); break;
             case RIGHT: move(1, 0); break;
+            case NEXT: {
+                if (isLevelFinished()) {
+                    this.screen.clear();
+                    this.activeMap = maps.pop();
+                }
+            } break;
             default: break;
         }
     }
@@ -105,6 +112,13 @@ public class Game {
         TextCharacter[] textCharactersBoxes = TextCharacter.fromString("Score: " + Long.toString(boxesOnGoal) + "/" + Integer.toString(this.activeMap.boxes.size()));
         for (int i = 0; i < textCharactersBoxes.length; i++)
             this.screen.setCharacter(15+i,2,  textCharactersBoxes[i]);
+
+        if (isLevelFinished()) {
+            TextCharacter[] textCharactersSuccess = TextCharacter.fromString("Level completed, Press N to continue.");
+            for (int i = 0; i < textCharactersSuccess.length; i++)
+                this.screen.setCharacter(2+i, 3, textCharactersSuccess[i]);
+        }
+
     }
 
     private void renderMap() {
@@ -116,5 +130,11 @@ public class Game {
                 this.screen.setCharacter(x+xOff, y+yOff, new TextCharacter(list.get(y).charAt(x)));
             }
         }
+    }
+
+    private boolean isLevelFinished() {
+        long onGoal = this.activeMap.boxes.stream().filter(it -> this.activeMap.map[it.getX()][it.getY()] instanceof Goal).count();
+        int goals = this.activeMap.boxes.size();
+        return goals == onGoal;
     }
 }
