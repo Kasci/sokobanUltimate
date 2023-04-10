@@ -14,7 +14,8 @@ public class MapFactory {
     public MapObject fromFile(char c) {
         switch (c) {
             case '#': return new Wall();
-            case '.': return new Goal();
+            case '.':
+            case '*': return new Goal();
             default: return new Empty();
         }
     }
