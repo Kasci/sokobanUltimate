@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class Map {
 
+    public int sizeX, sizeY;
     public MapObject[][] map;
     public ArrayList<Box> boxes;
     public Player player;
@@ -24,11 +25,11 @@ public class Map {
         MapFactory factory  = new MapFactory();
         int rows = map.length;
         int cols = map[0].length;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (i == player.getY() && j == player.getX()) sb.append("@");
-                else if (isBox(j,i) && map[i][j] instanceof Empty) sb.append("$");
-                else if (isBox(j,i) && map[i][j] instanceof Goal) sb.append("*");
+        for (int j = 0; j < cols; j++) {
+            for (int i = 0; i < rows; i++) {
+                if (j == player.getY() && i == player.getX()) sb.append("@");
+                else if (isBox(i,j) && map[i][j] instanceof Empty) sb.append("$");
+                else if (isBox(i,j) && map[i][j] instanceof Goal) sb.append("*");
                 else sb.append(factory.toMap(map[i][j]));
             }
             sb.append("\n");

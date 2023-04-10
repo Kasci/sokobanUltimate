@@ -55,11 +55,13 @@ public class LevelLoader {
         MapFactory factory = new MapFactory();
         Map map = new Map();
 
-        map.map = new MapObject[raw.size()][maxSize.get().length()];
+        map.map = new MapObject[maxSize.get().length()][raw.size()];
+        map.sizeX = maxSize.get().length();
+        map.sizeY = raw.size();
         for (int i = 0; i < raw.size(); i++) {
             for (int j = 0; j < maxSize.get().length(); j++) {
                 if (j >= raw.get(i).length()) {
-                    map.map[i][j] = new Empty();
+                    map.map[j][i] = new Empty();
                 } else {
                     char c = raw.get(i).charAt(j);
                     if (c == '@') {
@@ -68,7 +70,7 @@ public class LevelLoader {
                     if (c == '$') {
                         map.boxes.add(new Box(j,i));
                     }
-                    map.map[i][j] = factory.get(c);
+                    map.map[j][i] = factory.get(c);
                 }
             }
         }
