@@ -1,9 +1,7 @@
 package sk.kasci.sokoban.objects;
 
 public class MapActor {
-
     private int x, y;
-
     public MapActor(int x, int y) {
         this.x = x;
         this.y = y;

@@ -7,7 +7,6 @@ public class Main {
     public static void main(String[] args) {
         LevelLoader loader = new LevelLoader();
         Game game = new Game(loader.loadLevels("levels.txt"));
-        Map m = game.getMap(0);
-        System.out.println(m.toString());
+        game.start();
     }
 }

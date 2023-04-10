@@ -63,10 +63,10 @@ public class LevelLoader {
                 } else {
                     char c = raw.get(i).charAt(j);
                     if (c == '@') {
-                        map.player = new Player(i,j);
+                        map.player = new Player(j,i);
                     }
                     if (c == '$') {
-                        map.boxes.add(new Box(i,j));
+                        map.boxes.add(new Box(j,i));
                     }
                     map.map[i][j] = factory.get(c);
                 }

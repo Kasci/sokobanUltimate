@@ -26,9 +26,9 @@ public class Map {
         int cols = map[0].length;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                if (i == player.getX() && j == player.getY()) sb.append("@");
-                else if (isBox(i,j) && map[i][j] instanceof Empty) sb.append("$");
-                else if (isBox(i,j) && map[i][j] instanceof Goal) sb.append("*");
+                if (i == player.getY() && j == player.getX()) sb.append("@");
+                else if (isBox(j,i) && map[i][j] instanceof Empty) sb.append("$");
+                else if (isBox(j,i) && map[i][j] instanceof Goal) sb.append("*");
                 else sb.append(factory.toMap(map[i][j]));
             }
             sb.append("\n");
