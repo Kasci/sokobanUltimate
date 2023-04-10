@@ -2,17 +2,14 @@ package sk.kasci.sokoban;
 
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.screen.Screen;
-import sk.kasci.sokoban.input.ConsoleInput;
 import sk.kasci.sokoban.input.InputValue;
 import sk.kasci.sokoban.input.WindowInput;
 import sk.kasci.sokoban.objects.Map;
-import sk.kasci.sokoban.objects.MapObject;
 import sk.kasci.sokoban.objects.mapActors.Box;
 import sk.kasci.sokoban.objects.mapObjects.Goal;
 import sk.kasci.sokoban.objects.mapObjects.Wall;
 
 import java.io.IOException;
-import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
