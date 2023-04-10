@@ -67,7 +67,7 @@ public class LevelLoader {
                     if (c == '@') {
                         map.player = new Player(j,i);
                     }
-                    if (c == '$') {
+                    if (c == '$' || c == '*') {
                         map.boxes.add(new Box(j,i));
                     }
                     map.map[j][i] = factory.fromFile(c);
