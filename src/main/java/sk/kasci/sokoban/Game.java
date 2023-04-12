@@ -10,7 +10,6 @@ import sk.kasci.sokoban.objects.mapObjects.Goal;
 import sk.kasci.sokoban.objects.mapObjects.Wall;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -83,30 +82,30 @@ public class Game {
     private void move(int dx, int dy) {
         /* if step size is bigger than 1, throw an error for now */
         if (dx > 1 || dx < -1 || dy > 1 || dy < -1) throw new RuntimeException("There is too much movement");
-        int x = this.activeMap.player.getX();
-        int y = this.activeMap.player.getY();
+        int x = this.activeMap.getPlayer().getX();
+        int y = this.activeMap.getPlayer().getY();
         /* if we want to step oustide of map or into the wall, do nothing */
-        if (x+dx > this.activeMap.sizeX || y+dy > this.activeMap.sizeY || this.activeMap.map[x+dx][y+dy] instanceof Wall) {
+        if (x+dx > this.activeMap.getWidth() || y+dy > this.activeMap.getHeight() || this.activeMap.getMapObject(x+dx,y+dy) instanceof Wall) {
             return;
         }
         /* if there is no box, make step, otherwise continue checking */
-        Optional<Box> boxOptional = this.activeMap.boxes.stream().filter(it -> it.getX() == x + dx && it.getY() == y + dy).findFirst();
+        Optional<Box> boxOptional = this.activeMap.getBoxes().stream().filter(it -> it.getX() == x + dx && it.getY() == y + dy).findFirst();
         if (!boxOptional.isPresent()) {
-            this.activeMap.player.move(dx, dy);
+            this.activeMap.getPlayer().move(dx, dy);
             return;
         }
         /* if there is wall behind the box, do nothing */
-        if (x+2*dx > this.activeMap.sizeX || y+2*dy > this.activeMap.sizeY || this.activeMap.map[x+2*dx][y+2*dy] instanceof Wall) {
+        if (x+2*dx > this.activeMap.getWidth() || y+2*dy > this.activeMap.getHeight() || this.activeMap.getMapObject(x+2*dx,y+2*dy) instanceof Wall) {
             return;
         }
         /* if there is another box behind a box, do nothing*/
-        Optional<Box> boxOptional2 = this.activeMap.boxes.stream().filter(it -> it.getX() == x + 2*dx && it.getY() == y + 2*dy).findFirst();
+        Optional<Box> boxOptional2 = this.activeMap.getBoxes().stream().filter(it -> it.getX() == x + 2*dx && it.getY() == y + 2*dy).findFirst();
         if (boxOptional2.isPresent()) return;
 
         /* otherwise move box and player */
         Box box = boxOptional.get();
         box.move(dx,dy);
-        this.activeMap.player.move(dx, dy);
+        this.activeMap.getPlayer().move(dx, dy);
     }
 
     /**
@@ -136,14 +135,14 @@ public class Game {
      */
     private void renderUI() {
         /* renders number of steps */
-        int steps = this.activeMap.player.getSteps();
+        int steps = this.activeMap.getPlayer().getSteps();
         TextCharacter[] textCharactersSteps = TextCharacter.fromString("Steps: " + Integer.toString(steps));
         for (int i = 0; i < textCharactersSteps.length; i++)
             this.screen.setCharacter(2+i,2,  textCharactersSteps[i]);
 
         /* render numeber of boxes on goals with total of boxes */
-        long boxesOnGoal = this.activeMap.boxes.stream().filter(it -> this.activeMap.map[it.getX()][it.getY()] instanceof Goal).count();
-        TextCharacter[] textCharactersBoxes = TextCharacter.fromString("Score: " + Long.toString(boxesOnGoal) + "/" + Integer.toString(this.activeMap.boxes.size()));
+        long boxesOnGoal = this.activeMap.getBoxes().stream().filter(it -> this.activeMap.getMapObject(it.getX(), it.getY()) instanceof Goal).count();
+        TextCharacter[] textCharactersBoxes = TextCharacter.fromString("Score: " + Long.toString(boxesOnGoal) + "/" + Integer.toString(this.activeMap.getBoxes().size()));
         for (int i = 0; i < textCharactersBoxes.length; i++)
             this.screen.setCharacter(15+i,2,  textCharactersBoxes[i]);
 
@@ -175,8 +174,8 @@ public class Game {
      * @return boolean if all boxes are on goals
      */
     private boolean isLevelFinished() {
-        long onGoal = this.activeMap.boxes.stream().filter(it -> this.activeMap.map[it.getX()][it.getY()] instanceof Goal).count();
-        int goals = this.activeMap.boxes.size();
+        long onGoal = this.activeMap.getBoxes().stream().filter(it -> this.activeMap.getMapObject(it.getX(), it.getY()) instanceof Goal).count();
+        int goals = this.activeMap.getBoxes().size();
         return goals == onGoal;
     }
 }

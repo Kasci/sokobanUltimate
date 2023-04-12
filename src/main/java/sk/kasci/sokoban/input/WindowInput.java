@@ -13,6 +13,7 @@ public class WindowInput {
     public static InputValue getInput(Screen screen) {
         try {
             KeyStroke stroke = screen.readInput();
+            if (stroke == null || stroke.getCharacter() == null) return NONE;
             switch (stroke.getCharacter()) {
                 case 'w': return UP;
                 case 's': return DOWN;

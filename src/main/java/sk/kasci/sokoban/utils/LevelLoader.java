@@ -1,8 +1,6 @@
 package sk.kasci.sokoban.utils;
 
 import sk.kasci.sokoban.objects.Map;
-import sk.kasci.sokoban.objects.MapObject;
-import sk.kasci.sokoban.objects.mapActors.Player;
 import sk.kasci.sokoban.objects.mapActors.Box;
 import sk.kasci.sokoban.objects.mapObjects.Empty;
 
@@ -53,24 +51,21 @@ public class LevelLoader {
         Optional<String> maxSize = raw.stream().max(Comparator.comparingInt(String::length));
         if (!maxSize.isPresent()) throw new RuntimeException("Unknown max value");
         MapFactory factory = new MapFactory();
-        Map map = new Map();
+        Map map = new Map(maxSize.get().length(), raw.size());
 
-        map.map = new MapObject[maxSize.get().length()][raw.size()];
-        map.sizeX = maxSize.get().length();
-        map.sizeY = raw.size();
-        for (int i = 0; i < raw.size(); i++) {
-            for (int j = 0; j < maxSize.get().length(); j++) {
-                if (j >= raw.get(i).length()) {
-                    map.map[j][i] = new Empty();
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                if (x >= raw.get(y).length()) {
+                    map.setMapObject(x,y, new Empty());
                 } else {
-                    char c = raw.get(i).charAt(j);
+                    char c = raw.get(y).charAt(x);
                     if (c == '@') {
-                        map.player = new Player(j,i);
+                        map.createPlayer(x,y);
                     }
                     if (c == '$' || c == '*') {
-                        map.boxes.add(new Box(j,i));
+                        map.createBox(x,y);
                     }
-                    map.map[j][i] = factory.fromFile(c);
+                    map.setMapObject(x,y, factory.fromFile(c));
                 }
             }
         }
