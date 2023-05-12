@@ -5,6 +5,7 @@ import sk.kasci.sokoban.Game;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.MapObject;
 import sk.kasci.sokoban.objects.mapActors.Box;
+import sk.kasci.sokoban.objects.mapActors.Player;
 import sk.kasci.sokoban.objects.mapObjects.Empty;
 import sk.kasci.sokoban.objects.mapObjects.Goal;
 import sk.kasci.sokoban.objects.mapObjects.Wall;
@@ -46,24 +47,27 @@ public class SwingRenderer implements Renderer{
         /**
          * Tento image bude sluzit ako buffer, ak by sme ho odstranili a priamo kreslili na obrazovku tak cele to bude blikat
          * */
-//        BufferedImage bi = new BufferedImage(640, 640, BufferedImage.TYPE_INT_RGB);
-//        Graphics2D gr = (Graphics2D) bi.getGraphics();
+        BufferedImage bi = new BufferedImage(640, 640, BufferedImage.TYPE_INT_RGB);
+        Graphics2D gr = (Graphics2D) bi.getGraphics();
         Map map = game.getActiveMap();
         int size = 32;
         int xOff = 0;
         int yOff = 0;
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
-                g.setColor(getColor(map.getMapObject(x,y)));
-                g.fillRect(x*size+xOff, y*size+yOff, size, size);
+                gr.setColor(getColor(map.getMapObject(x,y)));
+                gr.fillRect(x*size+xOff, y*size+yOff, size, size);
             }
         }
         for (Box b: map.getBoxes()) {
-            g.setColor(Color.ORANGE);
-            g.fillRect(b.getX()*size+xOff, b.getY()*size+yOff, size, size);
+            gr.setColor(Color.ORANGE);
+            gr.fillRect(b.getX()*size+xOff, b.getY()*size+yOff, size, size);
         }
+        Player player = map.getPlayer();
+        gr.setColor(Color.WHITE);
+        gr.fillRect(player.getX()*size+xOff, player.getY()*size+yOff, size, size);
 
-//        g.drawImage(bi, 0, 0, canvas);
+        g.drawImage(bi, 0, 0, canvas);
     }
 
     private Color getColor(MapObject mapObject) {
