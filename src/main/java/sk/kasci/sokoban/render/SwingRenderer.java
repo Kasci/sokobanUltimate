@@ -1,5 +1,6 @@
 package sk.kasci.sokoban.render;
 
+import com.googlecode.lanterna.TextCharacter;
 import sk.kasci.sokoban.Game;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.MapObject;
@@ -51,7 +52,7 @@ public class SwingRenderer implements Renderer{
         Map map = game.getActiveMap();
         int size = 64;
         int xOff = 0;
-        int yOff = 0;
+        int yOff = 64;
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
                 renderTexture(gr, map, getTexture(map.getMapObject(x,y)), x, y, size, xOff, yOff);
@@ -68,7 +69,21 @@ public class SwingRenderer implements Renderer{
         Player player = map.getPlayer();
         renderTexture(gr, map, Textures.PLAYER, player.getX(), player.getY(), size, xOff, yOff);
 
+        renderUI(gr, game);
+
         g.drawImage(bi, 0, 0, canvas);
+    }
+
+    private void renderUI(Graphics2D gr, Game game) {
+        Font font = gr.getFont().deriveFont(48f);
+        gr.setFont(font);
+        gr.drawString("Steps: " + game.getActiveMap().getPlayer().getSteps(), 10,64);
+        long boxesOnGoal = game.getActiveMap().getBoxes().stream().filter(it -> game.getActiveMap().getMapObject(it.getX(), it.getY()) instanceof Goal).count();
+        gr.drawString("Score: " + Long.toString(boxesOnGoal) + "/" + Integer.toString(game.getActiveMap().getBoxes().size()),  1000,64);
+
+        if (game.isLevelFinished()) {
+            gr.drawString("Level completed, Press N to continue.",150,64);
+        }
     }
 
     private void renderObject(Graphics2D gr, Map map, Color color, int x, int y, int size, int xOff, int yOff) {
