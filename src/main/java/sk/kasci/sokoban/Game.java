@@ -3,12 +3,14 @@ package sk.kasci.sokoban;
 import sk.kasci.sokoban.input.InputValue;
 import sk.kasci.sokoban.input.Inputter;
 import sk.kasci.sokoban.input.LanternaInput;
+import sk.kasci.sokoban.input.SwingInput;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.mapActors.Box;
 import sk.kasci.sokoban.objects.mapObjects.Goal;
 import sk.kasci.sokoban.objects.mapObjects.Wall;
 import sk.kasci.sokoban.render.LanternaRenderer;
 import sk.kasci.sokoban.render.Renderer;
+import sk.kasci.sokoban.render.SwingRenderer;
 
 import java.util.LinkedList;
 import java.util.Optional;
@@ -30,8 +32,10 @@ public class Game {
     public Game(LinkedList<Map> maps) {
         this.maps = maps;
 
-        renderer = new LanternaRenderer();
-        inputter = new LanternaInput(((LanternaRenderer)renderer).getScreen());
+//        renderer = new LanternaRenderer();
+//        inputter = new LanternaInput(((LanternaRenderer)renderer).getScreen());
+        renderer = new SwingRenderer();
+        inputter = new SwingInput();
     }
 
     /**
