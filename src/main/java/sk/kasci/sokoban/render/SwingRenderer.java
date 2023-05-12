@@ -11,6 +11,7 @@ import sk.kasci.sokoban.objects.mapObjects.Wall;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class SwingRenderer implements Renderer{
@@ -42,6 +43,11 @@ public class SwingRenderer implements Renderer{
 
     @Override
     public void render(Game game) {
+        /**
+         * Tento image bude sluzit ako buffer, ak by sme ho odstranili a priamo kreslili na obrazovku tak cele to bude blikat
+         * */
+//        BufferedImage bi = new BufferedImage(640, 640, BufferedImage.TYPE_INT_RGB);
+//        Graphics2D gr = (Graphics2D) bi.getGraphics();
         Map map = game.getActiveMap();
         int size = 32;
         int xOff = 0;
@@ -52,6 +58,12 @@ public class SwingRenderer implements Renderer{
                 g.fillRect(x*size+xOff, y*size+yOff, size, size);
             }
         }
+        for (Box b: map.getBoxes()) {
+            g.setColor(Color.ORANGE);
+            g.fillRect(b.getX()*size+xOff, b.getY()*size+yOff, size, size);
+        }
+
+//        g.drawImage(bi, 0, 0, canvas);
     }
 
     private Color getColor(MapObject mapObject) {
