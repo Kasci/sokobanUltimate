@@ -85,4 +85,8 @@ public class SwingRenderer implements Renderer{
     public void clear() {
 
     }
+
+    public JFrame getFrame() {
+        return frame;
+    }
 }

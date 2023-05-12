@@ -35,7 +35,7 @@ public class Game {
 //        renderer = new LanternaRenderer();
 //        inputter = new LanternaInput(((LanternaRenderer)renderer).getScreen());
         renderer = new SwingRenderer();
-        inputter = new SwingInput();
+        inputter = new SwingInput(((SwingRenderer)renderer).getFrame());
     }
 
     /**
