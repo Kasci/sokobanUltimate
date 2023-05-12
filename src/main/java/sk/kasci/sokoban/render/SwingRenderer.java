@@ -1,6 +1,5 @@
 package sk.kasci.sokoban.render;
 
-import com.googlecode.lanterna.TextCharacter;
 import sk.kasci.sokoban.Game;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.MapObject;
@@ -13,7 +12,6 @@ import sk.kasci.sokoban.objects.mapObjects.Wall;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 public class SwingRenderer implements Renderer{
 
@@ -55,19 +53,28 @@ public class SwingRenderer implements Renderer{
         int yOff = 0;
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
-                gr.setColor(getColor(map.getMapObject(x,y)));
-                gr.fillRect(x*size+xOff, y*size+yOff, size, size);
+                renderObject(gr, map, getColor(map.getMapObject(x,y)), x, y, size, xOff, yOff);
+
             }
         }
         for (Box b: map.getBoxes()) {
-            gr.setColor(Color.ORANGE);
-            gr.fillRect(b.getX()*size+xOff, b.getY()*size+yOff, size, size);
+            renderObject(gr, map, Color.ORANGE, b.getX(), b.getY(), size, xOff, yOff);
+
         }
         Player player = map.getPlayer();
-        gr.setColor(Color.WHITE);
-        gr.fillRect(player.getX()*size+xOff, player.getY()*size+yOff, size, size);
+        renderObject(gr, map, Color.WHITE, player.getX(), player.getY(), size, xOff, yOff);
 
         g.drawImage(bi, 0, 0, canvas);
+    }
+
+    private void renderObject(Graphics2D gr, Map map, Color color, int x, int y, int size, int xOff, int yOff) {
+        gr.setColor(color);
+        gr.fillRect(x* size + xOff, y* size + yOff, size, size);
+        MapObject mapObject = map.getMapObject(x, y);
+        if (mapObject instanceof Goal) {
+            gr.setColor(getColor(mapObject));
+            gr.fillRect(x* size + xOff +5, y* size + yOff +5, size -10, size -10);
+        }
     }
 
     private Color getColor(MapObject mapObject) {
