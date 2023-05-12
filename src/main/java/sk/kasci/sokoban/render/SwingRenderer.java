@@ -12,6 +12,7 @@ import sk.kasci.sokoban.objects.mapObjects.Wall;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.rmi.UnexpectedException;
 
 public class SwingRenderer implements Renderer{
 
@@ -53,8 +54,7 @@ public class SwingRenderer implements Renderer{
         int yOff = 0;
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
-                renderObject(gr, map, getColor(map.getMapObject(x,y)), x, y, size, xOff, yOff);
-
+                renderTexture(gr, map, getTexture(map.getMapObject(x,y)), x, y, size, xOff, yOff);
             }
         }
         for (Box b: map.getBoxes()) {
@@ -77,6 +77,15 @@ public class SwingRenderer implements Renderer{
         }
     }
 
+    private void renderTexture(Graphics2D gr, Map map, BufferedImage image, int x, int y, int size, int xOff, int yOff) {
+        gr.drawImage(image, x* size + xOff, y* size + yOff, canvas);
+        MapObject mapObject = map.getMapObject(x, y);
+//        if (mapObject instanceof Goal) {
+//            gr.setColor(getColor(mapObject));
+//            gr.fillRect(x* size + xOff +5, y* size + yOff +5, size -10, size -10);
+//        }
+    }
+
     private Color getColor(MapObject mapObject) {
         if (mapObject instanceof Empty) {
             return Color.BLACK;
@@ -86,6 +95,17 @@ public class SwingRenderer implements Renderer{
             return Color.BLUE;
         }
         return Color.RED;
+    }
+
+    private BufferedImage getTexture(MapObject mapObject) {
+        if (mapObject instanceof Empty) {
+            return new BufferedImage(64,64,BufferedImage.TYPE_INT_RGB);
+        } else if (mapObject instanceof Goal) {
+            return TextureFactory.GOAL;
+        } else if (mapObject instanceof Wall) {
+            return TextureFactory.WALL;
+        }
+        throw new RuntimeException("There is no such Map Object defined");
     }
 
     @Override
