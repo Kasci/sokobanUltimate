@@ -22,7 +22,7 @@ public class SwingRenderer implements Renderer{
 
     public SwingRenderer() {
         frame = new JFrame();
-        frame.setSize(640, 640);
+        frame.setSize(1280, 1280);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
@@ -45,10 +45,10 @@ public class SwingRenderer implements Renderer{
         /**
          * Tento image bude sluzit ako buffer, ak by sme ho odstranili a priamo kreslili na obrazovku tak cele to bude blikat
          * */
-        BufferedImage bi = new BufferedImage(640, 640, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(1280, 1280, BufferedImage.TYPE_INT_RGB);
         Graphics2D gr = (Graphics2D) bi.getGraphics();
         Map map = game.getActiveMap();
-        int size = 32;
+        int size = 64;
         int xOff = 0;
         int yOff = 0;
         for (int y = 0; y < map.getHeight(); y++) {
