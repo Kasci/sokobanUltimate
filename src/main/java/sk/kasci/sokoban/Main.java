@@ -7,6 +7,7 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.screen.VirtualScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import sk.kasci.sokoban.utils.LevelLoader;
@@ -19,12 +20,7 @@ public class Main {
         LevelLoader loader = new LevelLoader();
         Game game = new Game(loader.loadLevels("levels.txt"));
 
-        Terminal terminal = new DefaultTerminalFactory().createTerminal();
-        Screen screen = new TerminalScreen(terminal);
-        screen.startScreen();
+        game.start();
 
-        game.start(screen);
-
-        screen.stopScreen();
     }
 }

@@ -1,32 +1,49 @@
 package sk.kasci.sokoban;
 
-import com.googlecode.lanterna.TextCharacter;
-import com.googlecode.lanterna.screen.Screen;
 import sk.kasci.sokoban.input.InputValue;
-import sk.kasci.sokoban.input.WindowInput;
+import sk.kasci.sokoban.input.Inputter;
+import sk.kasci.sokoban.input.LanternaInput;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.mapActors.Box;
 import sk.kasci.sokoban.objects.mapObjects.Goal;
 import sk.kasci.sokoban.objects.mapObjects.Wall;
+import sk.kasci.sokoban.render.LanternaRenderer;
+import sk.kasci.sokoban.render.Renderer;
 
-import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 public class Game {
 
-    private Screen screen;
-
     private LinkedList<Map> maps;
 
     private boolean running = false;
+
+    Renderer renderer;
+    Inputter inputter;
     private Map activeMap;
+
+    public Map getActiveMap() {
+        return activeMap;
+    }
 
     public Game(LinkedList<Map> maps) {
         this.maps = maps;
+
+        renderer = new LanternaRenderer();
+        inputter = new LanternaInput(((LanternaRenderer)renderer).getScreen());
     }
 
+    /**
+     * Inits the game variables, starts the game loop
+     */
+    public void start() {
+        this.running = true;
+        this.activeMap = maps.pop();
+        renderer.init();
+        loop();
+        renderer.deinit();
+    }
     /**
      * Game loop, that is executed from start,
      * till Q is pressed.
@@ -39,16 +56,6 @@ public class Game {
         }
     }
 
-    /**
-     * Inits the game variables, starts the game loop
-     * @param screen - parameter of Laterna screen
-     */
-    public void start(Screen screen) {
-        this.running = true;
-        this.activeMap = maps.pop();
-        this.screen = screen;
-        loop();
-    }
 
     /**
      * Executes the update, based on input
@@ -65,7 +72,7 @@ public class Game {
             case RIGHT: move(1, 0); break;
             case NEXT: {
                 if (isLevelFinished()) {
-                    this.screen.clear();
+                    this.renderer.clear();
                     this.activeMap = maps.pop();
                 }
             } break;
@@ -113,67 +120,21 @@ public class Game {
      * @return enum value of action
      */
     private InputValue input() {
-        return WindowInput.getInput(this.screen);
+        return inputter.getInput();
     }
 
     /**
      * renders window
      */
     private void render() {
-        renderMap();
-        renderUI();
-        try {
-            this.screen.refresh();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("It is not possible to render.");
-        }
-    }
-
-    /**
-     * renders UI
-     */
-    private void renderUI() {
-        /* renders number of steps */
-        int steps = this.activeMap.getPlayer().getSteps();
-        TextCharacter[] textCharactersSteps = TextCharacter.fromString("Steps: " + Integer.toString(steps));
-        for (int i = 0; i < textCharactersSteps.length; i++)
-            this.screen.setCharacter(2+i,2,  textCharactersSteps[i]);
-
-        /* render numeber of boxes on goals with total of boxes */
-        long boxesOnGoal = this.activeMap.getBoxes().stream().filter(it -> this.activeMap.getMapObject(it.getX(), it.getY()) instanceof Goal).count();
-        TextCharacter[] textCharactersBoxes = TextCharacter.fromString("Score: " + Long.toString(boxesOnGoal) + "/" + Integer.toString(this.activeMap.getBoxes().size()));
-        for (int i = 0; i < textCharactersBoxes.length; i++)
-            this.screen.setCharacter(15+i,2,  textCharactersBoxes[i]);
-
-        /* if level is finished, renders message */
-        if (isLevelFinished()) {
-            TextCharacter[] textCharactersSuccess = TextCharacter.fromString("Level completed, Press N to continue.");
-            for (int i = 0; i < textCharactersSuccess.length; i++)
-                this.screen.setCharacter(2+i, 3, textCharactersSuccess[i]);
-        }
-
-    }
-
-    /**
-     * renders current status of the map
-     */
-    private void renderMap() {
-        List<String> list = activeMap.toList();
-        int xOff = 5;
-        int yOff = 5;
-        for (int y = 0; y < list.size(); y++) {
-            for (int x = 0; x < list.get(y).length(); x++) {
-                this.screen.setCharacter(x+xOff, y+yOff, new TextCharacter(list.get(y).charAt(x)));
-            }
-        }
+        renderer.render(this);
     }
 
     /**
      * checks if all boxes are on goals
      * @return boolean if all boxes are on goals
      */
-    private boolean isLevelFinished() {
+    public boolean isLevelFinished() {
         long onGoal = this.activeMap.getBoxes().stream().filter(it -> this.activeMap.getMapObject(it.getX(), it.getY()) instanceof Goal).count();
         int goals = this.activeMap.getBoxes().size();
         return goals == onGoal;

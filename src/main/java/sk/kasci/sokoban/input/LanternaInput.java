@@ -8,9 +8,14 @@ import java.io.IOException;
 import static sk.kasci.sokoban.input.InputValue.*;
 import static sk.kasci.sokoban.input.InputValue.NONE;
 
-public class WindowInput {
+public class LanternaInput implements Inputter {
 
-    public static InputValue getInput(Screen screen) {
+    private Screen screen;
+
+    public LanternaInput(Screen screen) {
+        this.screen = screen;
+    }
+    public InputValue getInput() {
         try {
             KeyStroke stroke = screen.readInput();
             if (stroke == null || stroke.getCharacter() == null) return NONE;
