@@ -12,7 +12,6 @@ import sk.kasci.sokoban.objects.mapObjects.Wall;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.rmi.UnexpectedException;
 
 public class SwingRenderer implements Renderer{
 
@@ -101,9 +100,9 @@ public class SwingRenderer implements Renderer{
         if (mapObject instanceof Empty) {
             return new BufferedImage(64,64,BufferedImage.TYPE_INT_RGB);
         } else if (mapObject instanceof Goal) {
-            return TextureFactory.GOAL;
+            return Textures.GOAL;
         } else if (mapObject instanceof Wall) {
-            return TextureFactory.WALL;
+            return Textures.WALL;
         }
         throw new RuntimeException("There is no such Map Object defined");
     }

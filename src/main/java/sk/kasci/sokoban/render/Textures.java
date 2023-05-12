@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
-public class TextureFactory {
+public class Textures {
 
     public static BufferedImage BOX;
     public static BufferedImage GOAL;
@@ -14,15 +14,15 @@ public class TextureFactory {
     public static BufferedImage PLAYER;
 
     static {
-         BOX = TextureFactory.load("box.png");
-         GOAL = TextureFactory.load("goal.png");
-         BOX_ON_GOAL = TextureFactory.load("boxOnGoal.png");
-         WALL = TextureFactory.load("wall.png");
-         PLAYER = TextureFactory.load("DOWN0.png");
+         BOX = Textures.load("box.png");
+         GOAL = Textures.load("goal.png");
+         BOX_ON_GOAL = Textures.load("boxOnGoal.png");
+         WALL = Textures.load("wall.png");
+         PLAYER = Textures.load("DOWN0.png");
     }
 
     private static BufferedImage load(String path) {
-        URL url = TextureFactory.class.getClassLoader().getResource("sprites/"+path);
+        URL url = Textures.class.getClassLoader().getResource("sprites/"+path);
         if (url == null) throw new RuntimeException("There is no such file");
         try {
             BufferedImage bi = ImageIO.read(url);
