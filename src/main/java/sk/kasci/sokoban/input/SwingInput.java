@@ -17,6 +17,8 @@ public class SwingInput implements Inputter {
                 else if (e.getKeyChar() == 'a') lastInput = InputValue.LEFT;
                 else if (e.getKeyChar() == 's') lastInput = InputValue.DOWN;
                 else if (e.getKeyChar() == 'd') lastInput = InputValue.RIGHT;
+                else if (e.getKeyChar() == 'q') lastInput = InputValue.QUIT;
+                else if (e.getKeyChar() == 'n') lastInput = InputValue.NEXT;
             }
         });
     }

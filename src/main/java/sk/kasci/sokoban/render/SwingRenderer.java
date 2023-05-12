@@ -38,6 +38,7 @@ public class SwingRenderer implements Renderer{
     @Override
     public void deinit() {
         g.dispose();
+        frame.dispose();
     }
 
     @Override
@@ -57,11 +58,15 @@ public class SwingRenderer implements Renderer{
             }
         }
         for (Box b: map.getBoxes()) {
-            renderObject(gr, map, Color.ORANGE, b.getX(), b.getY(), size, xOff, yOff);
-
+            MapObject mapObject = map.getMapObject(b.getX(), b.getY());
+            if (mapObject instanceof Goal) {
+                renderTexture(gr, map, Textures.BOX_ON_GOAL, b.getX(), b.getY(), size, xOff, yOff);
+            } else {
+                renderTexture(gr, map, Textures.BOX, b.getX(), b.getY(), size, xOff, yOff);
+            }
         }
         Player player = map.getPlayer();
-        renderObject(gr, map, Color.WHITE, player.getX(), player.getY(), size, xOff, yOff);
+        renderTexture(gr, map, Textures.PLAYER, player.getX(), player.getY(), size, xOff, yOff);
 
         g.drawImage(bi, 0, 0, canvas);
     }
@@ -79,10 +84,6 @@ public class SwingRenderer implements Renderer{
     private void renderTexture(Graphics2D gr, Map map, BufferedImage image, int x, int y, int size, int xOff, int yOff) {
         gr.drawImage(image, x* size + xOff, y* size + yOff, canvas);
         MapObject mapObject = map.getMapObject(x, y);
-//        if (mapObject instanceof Goal) {
-//            gr.setColor(getColor(mapObject));
-//            gr.fillRect(x* size + xOff +5, y* size + yOff +5, size -10, size -10);
-//        }
     }
 
     private Color getColor(MapObject mapObject) {
