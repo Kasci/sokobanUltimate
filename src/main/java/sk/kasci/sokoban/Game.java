@@ -4,6 +4,7 @@ import sk.kasci.sokoban.input.InputValue;
 import sk.kasci.sokoban.input.Inputter;
 import sk.kasci.sokoban.input.LanternaInput;
 import sk.kasci.sokoban.input.SwingInput;
+import sk.kasci.sokoban.objects.Direction;
 import sk.kasci.sokoban.objects.Map;
 import sk.kasci.sokoban.objects.mapActors.Box;
 import sk.kasci.sokoban.objects.mapObjects.Goal;
@@ -70,10 +71,22 @@ public class Game {
     private void update(InputValue inputValue) {
         switch (inputValue) {
             case QUIT: this.running = false;
-            case UP: move(0,-1); break;
-            case DOWN: move(0, 1); break;
-            case LEFT: move(-1, 0); break;
-            case RIGHT: move(1, 0); break;
+            case UP:
+                move(0,-1);
+                this.activeMap.getPlayer().setFacing(Direction.UP);
+                break;
+            case DOWN:
+                move(0, 1);
+                this.activeMap.getPlayer().setFacing(Direction.DOWN);
+                break;
+            case LEFT:
+                move(-1, 0);
+                this.activeMap.getPlayer().setFacing(Direction.LEFT);
+                break;
+            case RIGHT:
+                move(1, 0);
+                this.activeMap.getPlayer().setFacing(Direction.RIGHT);
+                break;
             case NEXT: {
                 if (isLevelFinished()) {
                     this.renderer.clear();

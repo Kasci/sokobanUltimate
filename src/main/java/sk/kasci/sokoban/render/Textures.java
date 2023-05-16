@@ -11,16 +11,23 @@ public class Textures {
     public static BufferedImage GOAL;
     public static BufferedImage BOX_ON_GOAL;
     public static BufferedImage WALL;
-    public static BufferedImage PLAYER;
+    public static BufferedImage[] PLAYER;
 
     static {
          BOX = Textures.load("box.png");
          GOAL = Textures.load("goal.png");
          BOX_ON_GOAL = Textures.load("boxOnGoal.png");
          WALL = Textures.load("wall.png");
-         PLAYER = Textures.load("DOWN0.png");
+         PLAYER = Textures.load("UP0.png","LEFT0.png","DOWN0.png","RIGHT0.png");
     }
 
+    private static BufferedImage[] load(String... paths) {
+        BufferedImage[] ret = new BufferedImage[paths.length];
+        for (int i = 0; i < paths.length; i++) {
+            ret[i] = load(paths[i]);
+        }
+        return ret;
+    }
     private static BufferedImage load(String path) {
         URL url = Textures.class.getClassLoader().getResource("sprites/"+path);
         if (url == null) throw new RuntimeException("There is no such file");

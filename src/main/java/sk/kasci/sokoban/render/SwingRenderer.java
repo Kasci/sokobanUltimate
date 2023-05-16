@@ -67,11 +67,21 @@ public class SwingRenderer implements Renderer{
             }
         }
         Player player = map.getPlayer();
-        renderTexture(gr, map, Textures.PLAYER, player.getX(), player.getY(), size, xOff, yOff);
+        renderTexture(gr, map, getPlayerTexture(player), player.getX(), player.getY(), size, xOff, yOff);
 
         renderUI(gr, game);
 
         g.drawImage(bi, 0, 0, canvas);
+    }
+
+    private BufferedImage getPlayerTexture(Player player) {
+        switch (player.getFacing()) {
+            case UP: return Textures.PLAYER[0];
+            case LEFT: return Textures.PLAYER[1];
+            case DOWN: return Textures.PLAYER[2];
+            case RIGHT: return Textures.PLAYER[3];
+        }
+        throw new RuntimeException("Unsupported direction");
     }
 
     private void renderUI(Graphics2D gr, Game game) {
