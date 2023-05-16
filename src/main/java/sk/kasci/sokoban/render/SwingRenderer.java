@@ -47,9 +47,11 @@ public class SwingRenderer implements Renderer{
         /**
          * Tento image bude sluzit ako buffer, ak by sme ho odstranili a priamo kreslili na obrazovku tak cele to bude blikat
          * */
-        BufferedImage bi = new BufferedImage(1280, 1280, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(1280, 960, BufferedImage.TYPE_INT_RGB);
         Graphics2D gr = (Graphics2D) bi.getGraphics();
         Map map = game.getActiveMap();
+        gr.setColor(Color.DARK_GRAY);
+        gr.fillRect(0, 0, 1280, 960);
         int size = 64;
         int xOff = 0;
         int yOff = 64;
@@ -125,8 +127,13 @@ public class SwingRenderer implements Renderer{
 
     private BufferedImage getTexture(MapObject mapObject) {
         if (mapObject instanceof Empty) {
-            return new BufferedImage(64,64,BufferedImage.TYPE_INT_RGB);
-        } else if (mapObject instanceof Goal) {
+            BufferedImage bi = new BufferedImage(64,64,BufferedImage.TYPE_INT_RGB);
+            Graphics2D gr = (Graphics2D) bi.getGraphics();
+            gr.setColor(Color.DARK_GRAY);
+            gr.fillRect(0,0,64,64);
+            return bi;
+        } else
+            if (mapObject instanceof Goal) {
             return Textures.GOAL;
         } else if (mapObject instanceof Wall) {
             return Textures.WALL;
