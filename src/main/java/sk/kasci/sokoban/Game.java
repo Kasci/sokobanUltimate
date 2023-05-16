@@ -69,6 +69,9 @@ public class Game {
      * @param inputValue enum provided from Input
      */
     private void update(InputValue inputValue) {
+        if (this.activeMap.getPlayer().getDX() != 0 || this.activeMap.getPlayer().getDY() != 0) {
+            return;
+        }
         switch (inputValue) {
             case QUIT: this.running = false;
             case UP:

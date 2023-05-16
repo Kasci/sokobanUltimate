@@ -63,23 +63,24 @@ public class SwingRenderer implements Renderer{
             if (mapObject instanceof Goal) {
                 renderTexture(gr, map, Textures.BOX_ON_GOAL, b.getX(), b.getY(), size, xOff, yOff);
             } else {
-                renderTexture(gr, map, Textures.BOX, b.getX(), b.getY(), size, xOff, yOff);
+                renderTexture(gr, map, Textures.BOX, b.getX(), b.getY(), size, xOff - b.decDX(), yOff - b.decDY());
             }
         }
         Player player = map.getPlayer();
-        renderTexture(gr, map, getPlayerTexture(player), player.getX(), player.getY(), size, xOff, yOff);
+        renderTexture(gr, map, getPlayerTexture(player, Math.abs(player.getDX()+player.getDY())), player.getX(), player.getY(), size, xOff - player.decDX(), yOff - player.decDY());
 
         renderUI(gr, game);
 
         g.drawImage(bi, 0, 0, canvas);
     }
 
-    private BufferedImage getPlayerTexture(Player player) {
+    private BufferedImage getPlayerTexture(Player player, int idx) {
+        int[] i = new int[] {1,0,2,0};
         switch (player.getFacing()) {
-            case UP: return Textures.PLAYER[0];
-            case LEFT: return Textures.PLAYER[1];
-            case DOWN: return Textures.PLAYER[2];
-            case RIGHT: return Textures.PLAYER[3];
+            case UP: return Textures.PLAYER_UP[i[idx/16%4]];
+            case LEFT: return Textures.PLAYER_LEFT[i[idx/16%4]];
+            case DOWN: return Textures.PLAYER_DOWN[i[idx/16%4]];
+            case RIGHT: return Textures.PLAYER_RIGHT[i[idx/16%4]];
         }
         throw new RuntimeException("Unsupported direction");
     }

@@ -11,14 +11,17 @@ public class Textures {
     public static BufferedImage GOAL;
     public static BufferedImage BOX_ON_GOAL;
     public static BufferedImage WALL;
-    public static BufferedImage[] PLAYER;
+    public static BufferedImage[] PLAYER_UP, PLAYER_LEFT, PLAYER_DOWN, PLAYER_RIGHT;
 
     static {
          BOX = Textures.load("box.png");
          GOAL = Textures.load("goal.png");
          BOX_ON_GOAL = Textures.load("boxOnGoal.png");
          WALL = Textures.load("wall.png");
-         PLAYER = Textures.load("UP0.png","LEFT0.png","DOWN0.png","RIGHT0.png");
+         PLAYER_UP = Textures.load("UP0.png", "UP1.png", "UP2.png");
+         PLAYER_DOWN = Textures.load("DOWN0.png", "DOWN1.png", "DOWN2.png");
+         PLAYER_RIGHT = Textures.load("RIGHT0.png", "RIGHT1.png", "RIGHT2.png");
+         PLAYER_LEFT = Textures.load("LEFT0.png", "LEFT1.png", "LEFT2.png");
     }
 
     private static BufferedImage[] load(String... paths) {
